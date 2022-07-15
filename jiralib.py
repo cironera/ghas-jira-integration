@@ -128,7 +128,7 @@ class JiraProject:
                 project=self.projectkey,
                 summary=STATE_ISSUE_SUMMARY,
                 description=STATE_ISSUE_TEMPLATE,
-                issuetype={"name": "Bug"},
+                issuetype={"name": "Anomaly"},
                 labels=self.labels,
             )
         elif len(issues) > 1:
@@ -190,7 +190,7 @@ class JiraProject:
                 repo_key=repo_key,
                 alert_key=alert_key,
             ),
-            issuetype={"name": "Bug"},
+            issuetype={"name": "Anomaly"},
             labels=self.labels,
         )
         logger.info(
