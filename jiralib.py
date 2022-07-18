@@ -128,7 +128,7 @@ class JiraProject:
                 project=self.projectkey,
                 summary=STATE_ISSUE_SUMMARY,
                 description=STATE_ISSUE_TEMPLATE,
-                issuetype={"name": "Finding"},
+                issuetype={"name": "Task"},
                 labels=self.labels,
             )
         elif len(issues) > 1:
