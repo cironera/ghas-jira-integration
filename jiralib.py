@@ -233,7 +233,7 @@ class JiraProject:
 class JiraIssue:
     def __init__(self, project, rawissue):
         self.project = project
-        logger.info(rawissue)
+        logger.info(rawissue) #temporary
         self.rawissue = rawissue
         self.j = self.project.j
         self.endstate = self.project.endstate
