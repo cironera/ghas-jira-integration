@@ -233,6 +233,7 @@ class JiraProject:
 class JiraIssue:
     def __init__(self, project, rawissue):
         self.project = project
+        logger.info(rawissue)
         self.rawissue = rawissue
         self.j = self.project.j
         self.endstate = self.project.endstate
@@ -254,6 +255,7 @@ class JiraIssue:
         return self.rawissue.id
 
     def delete(self):
+        #update here - cannot delete, but we can change the summary to start with [DELETE]
         logger.info("Deleting issue {ikey}.".format(ikey=self.key()))
         self.rawissue.delete()
 
