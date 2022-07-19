@@ -283,7 +283,7 @@ class JiraIssue:
             return
 
         if (transition == self.endstate):
-            self.rawissue.update(Resolution={'name': 'Done'})
+            #self.rawissue.update(Resolution={'name': 'Done'})
             self.rawissue.update(Comment={'body': 'Closed by GitHub to Jira sync'})
         elif (transition == self.reopenstate):
             self.rawissue.update(Comment={'body': 'Reopened by GitHub to Jira sync'})
