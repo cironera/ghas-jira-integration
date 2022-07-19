@@ -282,11 +282,13 @@ class JiraIssue:
             # nothing to do
             return
 
-        if (transition == self.endstate):
+        #if (transition == self.endstate):
             #self.rawissue.update(Resolution={'name': 'Done'})
-            self.rawissue.update(Comment={'body': 'Closed by GitHub to Jira sync'})
-        elif (transition == self.reopenstate):
-            self.rawissue.update(Comment={'body': 'Reopened by GitHub to Jira sync'})
+            #https://community.atlassian.com/t5/Answers-Developer-Questions/transition-via-jira-python/qaq-p/539371
+            #https://community.atlassian.com/t5/Jira-questions/add-a-comment-while-changing-issue-status-by-REST/qaq-p/590930
+         #   self.rawissue.update(Comment={'body': 'Closed by GitHub to Jira sync'})
+        #elif (transition == self.reopenstate):
+        #    self.rawissue.update(Comment={'body': 'Reopened by GitHub to Jira sync'})
             
         jira_transitions = {
             t["name"]: t["id"] for t in self.j.transitions(self.rawissue)
@@ -301,7 +303,7 @@ class JiraIssue:
             )
             raise Exception("Invalid JIRA transition")
 
-        self.j.transition_issue(self.rawissue, jira_transitions[transition])
+        self.j.transition_issue(self.rawissue, jira_transitions[transition], resolution = {'name': 'Done'}, comment = {'body': 'Transitioned by GitHub to Jira sync'})
 
         action = "Reopening" if transition == self.reopenstate else "Closing"
 
