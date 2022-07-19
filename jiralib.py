@@ -282,6 +282,14 @@ class JiraIssue:
             # nothing to do
             return
 
+        if (transition == self.endstate):
+            self.rawissue.update(resolution={'name': 'Done'})
+            self.rawissue.update(comment={'body': 'Closed by GitHub to Jira sync'})
+        elif (transition == self.reopenstate):
+            self.rawissue.update(comment={'body': 'Reopened by GitHub to Jira sync'})
+
+
+            
         jira_transitions = {
             t["name"]: t["id"] for t in self.j.transitions(self.rawissue)
         }
