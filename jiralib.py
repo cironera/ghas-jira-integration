@@ -304,7 +304,11 @@ class JiraIssue:
             raise Exception("Invalid JIRA transition")
 
         if transition == self.endstate:
-            self.j.transition_issue(self.rawissue, jira_transitions[transition],  fields={'comment':{'body': 'Transitioned by GitHub to Jira sync'}, 'resolution':{'name': 'Done'}})
+            self.j.transition_issue(self.rawissue, jira_transitions[transition],  fields={'comment':[{ 
+                "add": { 
+                    "body": "Transitioned by GitHub to Jira sync"
+                    } 
+                }] , 'resolution':{'name': 'Done'}})
         else:
             self.j.transition_issue(self.rawissue, jira_transitions[transition])
 
