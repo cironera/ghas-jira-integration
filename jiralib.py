@@ -304,9 +304,9 @@ class JiraIssue:
             raise Exception("Invalid JIRA transition")
 
         if transition == self.endstate:
-            self.j.transition_issue(self.rawissue, jira_transitions[transition],  fields={ 'resolution':{'name': 'Done'}, 'comment':{'body': 'Transitioned by GitHub to Jira sync'}})
+            self.j.transition_issue(self.rawissue, jira_transitions[transition],  fields={ 'resolution':{'name': 'Done'}}, comment='Closed by GitHub to Jira sync')
         else:
-            self.j.transition_issue(self.rawissue, jira_transitions[transition])
+            self.j.transition_issue(self.rawissue, jira_transitions[transition], comment='Reopened by GitHub to Jira sync')
 
         action = "Reopening" if transition == self.reopenstate else "Closing"
 
