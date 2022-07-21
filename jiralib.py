@@ -286,7 +286,15 @@ class JiraIssue:
         jira_transitions = {
             t["name"]: t["id"] for t in self.j.transitions(self.rawissue)
         }
-        if transition not in jira_transitions:
+
+        #need to do this due to transition names being different than the state names
+        transname = transition
+        if transition == self.endstate:
+            transname = "Force Close" 
+        elif transition == self.reopenstate:
+            transname = "Reopen"
+
+        if transname not in jira_transitions:
             logger.error(
                 'Transition "{transition}" not available for {issue_key}. Valid transitions: {jira_transitions}'.format(
                     transition=transition,
