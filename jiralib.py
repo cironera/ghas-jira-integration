@@ -256,8 +256,9 @@ class JiraIssue:
 
     def delete(self):
         #update here - cannot delete, but we can change the summary to start with [DELETE]
-        logger.info("Deleting issue {ikey}.".format(ikey=self.key()))
-        self.rawissue.delete()
+        logger.info("Mark issue {ikey} for deletion.".format(ikey=self.key()))
+        #self.rawissue.delete()
+        self.rawissue.update(summary="[DELETE] {}".format(self.rawissue.fields.summary))
 
     def get_state(self):
         return self.parse_state(self.rawissue.fields.status.name)
@@ -281,14 +282,6 @@ class JiraIssue:
         ):
             # nothing to do
             return
-
-        #if (transition == self.endstate):
-            #self.rawissue.update(Resolution={'name': 'Done'})
-            #https://community.atlassian.com/t5/Answers-Developer-Questions/transition-via-jira-python/qaq-p/539371
-            #https://community.atlassian.com/t5/Jira-questions/add-a-comment-while-changing-issue-status-by-REST/qaq-p/590930
-         #   self.rawissue.update(Comment={'body': 'Closed by GitHub to Jira sync'})
-        #elif (transition == self.reopenstate):
-        #    self.rawissue.update(Comment={'body': 'Reopened by GitHub to Jira sync'})
             
         jira_transitions = {
             t["name"]: t["id"] for t in self.j.transitions(self.rawissue)
