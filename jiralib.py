@@ -262,7 +262,6 @@ class JiraIssue:
     def delete(self):
         #update here - cannot delete, but we can change the summary to start with [DELETE]
         logger.info("Mark issue {ikey} for deletion.".format(ikey=self.key()))
-        self.rawissue.delete()
         if not self.rawissue.fields.summary.startswith('[DELETE]'):
             self.rawissue.update(summary="[DELETE] {}".format(self.rawissue.fields.summary))
 
