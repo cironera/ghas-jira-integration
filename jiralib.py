@@ -193,7 +193,7 @@ class JiraProject:
             issuetype={"name": "Alert"},
             labels=self.labels,
             customfield_10454="GitHub",         #Source
-            customfield_10907=alert_type,       #Alert Type
+            customfield_10907="Vulnerability",  #Alert Type - will need to parse alert_type into accepted ones
             customfield_10235=repo_id,          #Reported Products
             customfield_10909=repo_key,         #Alert Reference Key
             customfield_10910=alert_key,        #Alert Key
