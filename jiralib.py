@@ -352,7 +352,6 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
         alert_type = fields.customfield_10907
     
     m = re.search("([^\/]+$)", fields.customfield_10284) # pulling from url #number of issue from jira - like "RALEMANDSO-667"
-    logger.info(m)
     if m is None:
         return failed
     alert_num = int(m.group(1))
