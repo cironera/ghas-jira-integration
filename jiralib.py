@@ -346,7 +346,6 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
     repo_id = fields.customfield_10235
 
     #m = re.search("ALERT_TYPE=(.*)$", desc, re.MULTILINE) # Alert Type (customfield_10907)-
-    logger.info(fields.custom)
     if fields.customfield_10907 is None:
         alert_type = None
     else:
