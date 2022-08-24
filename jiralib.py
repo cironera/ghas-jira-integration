@@ -128,7 +128,7 @@ class JiraProject:
                 project=self.projectkey,
                 summary=STATE_ISSUE_SUMMARY,
                 description=STATE_ISSUE_TEMPLATE,
-                issuetype={"name": "Finding"},
+                issuetype={"name": "Alert"},
                 labels=self.labels,
             )
         elif len(issues) > 1:
@@ -181,7 +181,7 @@ class JiraProject:
             summary="{prefix} {short_desc} in {repo}".format(
                 prefix=TITLE_PREFIXES[alert_type], short_desc=short_desc, repo=repo_id
             ),
-            description=DESC_TEMPLATE.format(
+            description=DESC_TEMPLATE.format( #edit this down to minimum
                 long_desc=long_desc,
                 alert_url=alert_url,
                 repo_id=repo_id,
@@ -190,8 +190,14 @@ class JiraProject:
                 repo_key=repo_key,
                 alert_key=alert_key,
             ),
-            issuetype={"name": "Finding"},
+            issuetype={"name": "Alert"},
             labels=self.labels,
+            customfield_10454="GitHub",         #Source
+            customfield_10907=alert_type,       #Alert Type
+            customfield_10235=repo_id,          #Reported Products
+            customfield_10909=repo_key,         #Alert Reference Key
+            customfield_10910=alert_key,        #Alert Key
+            customfield_10284=alert_url,        #External Related Link
         )
         logger.info(
             "Created issue {issue_key} for alert {alert_num} in {repo_id}.".format(
@@ -210,6 +216,7 @@ class JiraProject:
         return JiraIssue(self, raw)
 
     def fetch_issues(self, key):
+        #heres where we tweak the search to look in new fields, not in the description
         issue_search = 'project={jira_project} and description ~ "{key}"'.format(
             jira_project='"{}"'.format(self.projectkey), key=key
         )
@@ -233,7 +240,6 @@ class JiraProject:
 class JiraIssue:
     def __init__(self, project, rawissue):
         self.project = project
-        logger.info(rawissue) #temporary
         self.rawissue = rawissue
         self.j = self.project.j
         self.endstate = self.project.endstate
@@ -241,7 +247,7 @@ class JiraIssue:
         self.labels = self.project.labels
 
     def is_managed(self):
-        if parse_alert_info(self.rawissue.fields.description)[0] is None:
+        if parse_alert_info(self.rawissue.fields.description)[0] is None:  #change to send fields
             return False
         return True
 
@@ -322,33 +328,34 @@ class JiraIssue:
             self.rawissue.update(fields={"labels": self.labels})
 
 
-def parse_alert_info(desc):
+def parse_alert_info(desc):   #change to accept rawissue.fields
     """
     Parse all the fields in an issue's description and return
     them as a tuple. If parsing fails for one of the fields,
     return a tuple of None's.
     """
+    #here's where we can switch things around to just drop these in the fields tbcreated
     failed = None, None, None, None
-    m = re.search("REPOSITORY_NAME=(.*)$", desc, re.MULTILINE)
+    m = re.search("REPOSITORY_NAME=(.*)$", desc, re.MULTILINE) #re not needed... here at least.  Just pull in the field  Reported Products (customfield_10235)
     if m is None:
         return failed
     repo_id = m.group(1)
 
-    m = re.search("ALERT_TYPE=(.*)$", desc, re.MULTILINE)
+    m = re.search("ALERT_TYPE=(.*)$", desc, re.MULTILINE) # Alert Type (customfield_10907)-
     if m is None:
         alert_type = None
     else:
         alert_type = m.group(1)
-    m = re.search("ALERT_NUMBER=(.*)$", desc, re.MULTILINE)
+    m = re.search("ALERT_NUMBER=(.*)$", desc, re.MULTILINE) #number of issue from jira - like "RALEMANDSO-667"
 
     if m is None:
         return failed
     alert_num = int(m.group(1))
-    m = re.search("REPOSITORY_KEY=(.*)$", desc, re.MULTILINE)
+    m = re.search("REPOSITORY_KEY=(.*)$", desc, re.MULTILINE) #Alert Reference Key (customfield_10909) - REPOSITORY_KEY
     if m is None:
         return failed
     repo_key = m.group(1)
-    m = re.search("ALERT_KEY=(.*)$", desc, re.MULTILINE)
+    m = re.search("ALERT_KEY=(.*)$", desc, re.MULTILINE)  #Alert Key (customfield_10910) - ALERT_KEY
     if m is None:
         return failed
     alert_key = m.group(1)
