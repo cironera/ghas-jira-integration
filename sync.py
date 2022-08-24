@@ -113,7 +113,7 @@ class Sync:
         # gather issues
         for i in self.jira.fetch_issues(repo.get_key()):
             logger.info(
-                "gathering issue {issue}...".format(issue=i.id)
+                "gathering issue {issue}...".format(issue=i.fields.key)
             )
             _, _, _, alert_key, _ = i.get_alert_info()
             if alert_key not in pairs:
