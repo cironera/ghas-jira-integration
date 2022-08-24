@@ -246,13 +246,12 @@ class JiraIssue:
         self.labels = self.project.labels
 
     def is_managed(self):
-        if parse_alert_info(self.rawissue.fields.description)[0] is None:  #change to send fields
+        if parse_alert_info(self.rawissue.fields)[0] is None:  #change to send fields
             return False
         return True
 
     def get_alert_info(self):
-        logger.info(self.rawissue.fields.customfield_10909)
-        return parse_alert_info(self.rawissue.fields.description)
+        return parse_alert_info(self.rawissue.fields)
 
     def key(self):
         return self.rawissue.key
@@ -328,7 +327,7 @@ class JiraIssue:
             self.rawissue.update(fields={"labels": self.labels})
 
 
-def parse_alert_info(desc):   #change to accept rawissue.fields
+def parse_alert_info(fields):   #change to accept rawissue.fields
     """
     Parse all the fields in an issue's description and return
     them as a tuple. If parsing fails for one of the fields,
@@ -336,29 +335,38 @@ def parse_alert_info(desc):   #change to accept rawissue.fields
     """
     #here's where we can switch things around to just drop these in the fields tbcreated
     failed = None, None, None, None
-    m = re.search("REPOSITORY_NAME=(.*)$", desc, re.MULTILINE) #re not needed... here at least.  Just pull in the field  Reported Products (customfield_10235)
-    if m is None:
+    #m = re.search("REPOSITORY_NAME=(.*)$", desc, re.MULTILINE) #re not needed... here at least.  Just pull in the field  Reported Products (customfield_10235)
+    #logger.info(
+    #        "incoming Repo = {repo}, Alert type = {type}, Alert Key = {key} ".format(
+    #            repo=fields.customfield_10235, type=self.rawissue.key
+    #        )
+    #    )
+    if fields.customfield_10235 is None:
         return failed
-    repo_id = m.group(1)
+    repo_id = fields.customfield_10235
 
-    m = re.search("ALERT_TYPE=(.*)$", desc, re.MULTILINE) # Alert Type (customfield_10907)-
-    if m is None:
+    #m = re.search("ALERT_TYPE=(.*)$", desc, re.MULTILINE) # Alert Type (customfield_10907)-
+    logger.info(fields.custom)
+    if fields.customfield_10907 is None:
         alert_type = None
     else:
-        alert_type = m.group(1)
-    m = re.search("ALERT_NUMBER=(.*)$", desc, re.MULTILINE) #number of issue from jira - like "RALEMANDSO-667"
-
+        alert_type = fields.customfield_10907
+    
+    m = re.search("([^\/]+$)", fields.customfield_10284) # pulling from url #number of issue from jira - like "RALEMANDSO-667"
+    logger.info(m)
     if m is None:
         return failed
     alert_num = int(m.group(1))
-    m = re.search("REPOSITORY_KEY=(.*)$", desc, re.MULTILINE) #Alert Reference Key (customfield_10909) - REPOSITORY_KEY
-    if m is None:
+
+    #m = re.search("REPOSITORY_KEY=(.*)$", desc, re.MULTILINE) #Alert Reference Key (customfield_10909) - REPOSITORY_KEY
+    if fields.customfield_10909 is None:
         return failed
-    repo_key = m.group(1)
+    repo_key = fields.customfield_10909
+
     m = re.search("ALERT_KEY=(.*)$", desc, re.MULTILINE)  #Alert Key (customfield_10910) - ALERT_KEY
-    if m is None:
+    if fields.customfield_10910 is None:
         return failed
-    alert_key = m.group(1)
+    alert_key = fields.customfield_10910 
 
     return repo_id, alert_num, repo_key, alert_key, alert_type
 
