@@ -216,7 +216,7 @@ class JiraProject:
 
     def fetch_issues(self, key):
         #heres where we tweak the search to look in new fields, not in the description
-        issue_search = 'project={jira_project} and customfield_10909 = "{key}"'.format(
+        issue_search = 'project={jira_project} and "Alert Reference Key" ~ "{key}"'.format(
             jira_project='"{}"'.format(self.projectkey), key=key
         )
         issues = list(
