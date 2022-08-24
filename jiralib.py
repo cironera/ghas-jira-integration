@@ -337,7 +337,7 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
     failed = None, None, None, None
     #m = re.search("REPOSITORY_NAME=(.*)$", desc, re.MULTILINE) #re not needed... here at least.  Just pull in the field  Reported Products (customfield_10235)
     logger.info(
-            "incoming Repo = {repo}, Alert type = {type}, Alert Key = {key} ".format(
+            "incoming Repo = {repo}, Alert type = {type}, Alert Ref Key = {key} ".format(
                 repo=fields.customfield_10235, type=fields.customfield_10907, key=fields.customfield_10909 
             )
         )
@@ -367,6 +367,11 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
         return failed
     alert_key = fields.customfield_10910 
 
+    logger.info(
+            "parsed Repo = {repo}, Alert type = {type}, Alert Ref Key = {key}, Alert Key = {akey}, number = {num} ".format(
+                repo=repo_id, type=alert_type, key=repo_key, akey = alert_key, num = alert_num
+            )
+        )
     return repo_id, alert_num, repo_key, alert_key, alert_type
 
 
