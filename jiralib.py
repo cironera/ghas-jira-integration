@@ -311,7 +311,7 @@ class JiraIssue:
             raise Exception("Invalid JIRA transition")
 
         if transition == self.endstate:
-            self.j.transition_issue(self.rawissue, 'Force Close',  fields={ 'customfield_10061':{'value': 'Done'}}, comment='Closed by GitHub to Jira sync')
+            self.j.transition_issue(self.rawissue, 'Force Close',  fields={ 'customfield_10061':'Resolved by GHAS to Jira sync'}, comment='Closed by GitHub to Jira sync')
         else:
             self.j.transition_issue(self.rawissue, 'Reopen', comment='Reopened by GitHub to Jira sync')
 
