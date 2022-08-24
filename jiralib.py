@@ -333,19 +333,11 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
     them as a tuple. If parsing fails for one of the fields,
     return a tuple of None's.
     """
-    #here's where we can switch things around to just drop these in the fields tbcreated
     failed = None, None, None, None
-    #m = re.search("REPOSITORY_NAME=(.*)$", desc, re.MULTILINE) #re not needed... here at least.  Just pull in the field  Reported Products (customfield_10235)
-    logger.info(
-            "incoming Repo = {repo}, Alert type = {type}, Alert Ref Key = {key} ".format(
-                repo=fields.customfield_10235, type=fields.customfield_10907, key=fields.customfield_10909 
-            )
-        )
     if fields.customfield_10235 is None:
         return failed
     repo_id = fields.customfield_10235
 
-    #m = re.search("ALERT_TYPE=(.*)$", desc, re.MULTILINE) # Alert Type (customfield_10907)-
     if fields.customfield_10907 is None:
         alert_type = None
     else:
@@ -356,21 +348,14 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
         return failed
     alert_num = int(m.group(1))
 
-    #m = re.search("REPOSITORY_KEY=(.*)$", desc, re.MULTILINE) #Alert Reference Key (customfield_10909) - REPOSITORY_KEY
     if fields.customfield_10909 is None:
         return failed
     repo_key = fields.customfield_10909
 
-    #m = re.search("ALERT_KEY=(.*)$", desc, re.MULTILINE)  #Alert Key (customfield_10910) - ALERT_KEY
     if fields.customfield_10910 is None:
         return failed
     alert_key = fields.customfield_10910 
 
-    logger.info(
-            "parsed Repo = {repo}, Alert type = {type}, Alert Ref Key = {key}, Alert Key = {akey}, number = {num} ".format(
-                repo=repo_id, type=alert_type, key=repo_key, akey = alert_key, num = alert_num
-            )
-        )
     return repo_id, alert_num, repo_key, alert_key, alert_type
 
 
