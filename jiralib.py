@@ -336,11 +336,11 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
     #here's where we can switch things around to just drop these in the fields tbcreated
     failed = None, None, None, None
     #m = re.search("REPOSITORY_NAME=(.*)$", desc, re.MULTILINE) #re not needed... here at least.  Just pull in the field  Reported Products (customfield_10235)
-    #logger.info(
-    #        "incoming Repo = {repo}, Alert type = {type}, Alert Key = {key} ".format(
-    #            repo=fields.customfield_10235, type=self.rawissue.key
-    #        )
-    #    )
+    logger.info(
+            "incoming Repo = {repo}, Alert type = {type}, Alert Key = {key} ".format(
+                repo=fields.customfield_10235, type=fields.customfield_10907, key=fields.customfield_10909 
+            )
+        )
     if fields.customfield_10235 is None:
         return failed
     repo_id = fields.customfield_10235
@@ -363,7 +363,7 @@ def parse_alert_info(fields):   #change to accept rawissue.fields
         return failed
     repo_key = fields.customfield_10909
 
-    m = re.search("ALERT_KEY=(.*)$", desc, re.MULTILINE)  #Alert Key (customfield_10910) - ALERT_KEY
+    #m = re.search("ALERT_KEY=(.*)$", desc, re.MULTILINE)  #Alert Key (customfield_10910) - ALERT_KEY
     if fields.customfield_10910 is None:
         return failed
     alert_key = fields.customfield_10910 
