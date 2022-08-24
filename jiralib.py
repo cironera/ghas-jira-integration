@@ -23,7 +23,6 @@ DESC_TEMPLATE = """
 
 ----
 This issue was automatically generated from a GitHub alert, and will be automatically resolved once the underlying problem is fixed.
-DO NOT MODIFY DESCRIPTION BELOW LINE.
 REPOSITORY_NAME={repo_id}
 ALERT_TYPE={alert_type}
 ALERT_NUMBER={alert_num}
@@ -192,8 +191,8 @@ class JiraProject:
             ),
             issuetype={"name": "Alert"},
             labels=self.labels,
-            customfield_10454={"id": "20301"},           #Source
-            customfield_10907={"id": "20303"},           #Alert Type - will need to parse alert_type into accepted ones
+            customfield_10454={"id": "20301"},              #Source = GitHub
+            customfield_10907={"id": "20303"},              #Alert Type = Code Scanning Alert
             customfield_10235=repo_id,                      #Reported Products
             customfield_10909=repo_key,                     #Alert Reference Key
             customfield_10910=alert_key,                    #Alert Key
@@ -217,7 +216,7 @@ class JiraProject:
 
     def fetch_issues(self, key):
         #heres where we tweak the search to look in new fields, not in the description
-        issue_search = 'project={jira_project} and description ~ "{key}"'.format(
+        issue_search = 'project={jira_project} and customfield_10909 = "{key}"'.format(
             jira_project='"{}"'.format(self.projectkey), key=key
         )
         issues = list(
