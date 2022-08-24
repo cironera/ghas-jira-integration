@@ -192,8 +192,8 @@ class JiraProject:
             ),
             issuetype={"name": "Alert"},
             labels=self.labels,
-            #customfield_10454={"name": "GitHub"},           #Source
-            #customfield_10907={"name": "Vulnerability"},    #Alert Type - will need to parse alert_type into accepted ones
+            customfield_10454={"id": "1"},           #Source
+            customfield_10907={"id": "1"},    #Alert Type - will need to parse alert_type into accepted ones
             customfield_10235=repo_id,                      #Reported Products
             customfield_10909=repo_key,                     #Alert Reference Key
             customfield_10910=alert_key,                    #Alert Key
@@ -311,7 +311,7 @@ class JiraIssue:
             raise Exception("Invalid JIRA transition")
 
         if transition == self.endstate:
-            self.j.transition_issue(self.rawissue, 'Force Close',  fields={ 'resolution':{'name': 'Done'}}, comment='Closed by GitHub to Jira sync')
+            self.j.transition_issue(self.rawissue, 'Force Close',  fields={ 'Resolution Description':'Done'}, comment='Closed by GitHub to Jira sync')
         else:
             self.j.transition_issue(self.rawissue, 'Reopen', comment='Reopened by GitHub to Jira sync')
 
