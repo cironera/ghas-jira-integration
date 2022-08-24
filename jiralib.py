@@ -251,7 +251,7 @@ class JiraIssue:
         return True
 
     def get_alert_info(self):
-        logger.info(self.rawissue.fields)
+        logger.info(self.rawissue.fields.customfield_10909)
         return parse_alert_info(self.rawissue.fields.description)
 
     def key(self):
