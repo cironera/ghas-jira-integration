@@ -260,7 +260,7 @@ class JiraIssue:
         return self.rawissue.id
 
     def delete(self):
-        #update here - cannot delete, but we can change the summary to start with [DELETE]
+        #update here - cannot delete, but we can change the summary to start with [DELETE] - and we should probably remove the alert reference key too... (TBD)
         logger.info("Mark issue {ikey} for deletion.".format(ikey=self.key()))
         if not self.rawissue.fields.summary.startswith('[DELETE]'):
             self.rawissue.update(summary="[DELETE] {}".format(self.rawissue.fields.summary))

@@ -109,6 +109,7 @@ class Sync:
         # gather alerts
         for a in itertools.chain(repo.get_secrets(), repo.get_alerts()):
             pairs[a.get_key()] = (a, [])
+            logger.info(a.severity())
 
         # gather issues
         for i in self.jira.fetch_issues(repo.get_key()):
