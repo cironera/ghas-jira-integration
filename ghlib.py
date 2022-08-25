@@ -269,9 +269,9 @@ class AlertBase:
     def get_key(self):
         raise NotImplementedError
     
-    def get_severity(self):
+    def severity(self):
         logger.info(self.json)
-        return "error" #self.json["rule"]["severity"]
+        return self.json["rule"]["severity"]
 
     def adjust_state(self, target_state):
         if self.get_state() == target_state:
