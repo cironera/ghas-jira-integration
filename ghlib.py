@@ -342,8 +342,7 @@ class Secret(AlertBase):
         )
 
     def severity(self):
-        logger.info(self.json)
-        return self.json["rule"]["severity"]
+        return "CRITICAL"
 
     def do_adjust_state(self, target_state):
         state = "open"
