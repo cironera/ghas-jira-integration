@@ -153,7 +153,13 @@ class GHRepository:
             state = "&state=" + state
         else:
             state = ""
-
+        logger.info( "{api_url}/repos/{repo_id}/{api_segment}/alerts?per_page={results_per_page}{state}".format(
+                    api_url=self.gh.url,
+                    repo_id=self.repo_id,
+                    api_segment=api_segment,
+                    state=state,
+                    results_per_page=RESULTS_PER_PAGE,
+                ))
         try:
             resp = requests.get(
                 "{api_url}/repos/{repo_id}/{api_segment}/alerts?per_page={results_per_page}{state}".format(
