@@ -109,7 +109,6 @@ class Sync:
         # gather alerts
         for a in itertools.chain(repo.get_secrets(), repo.get_alerts()):
             pairs[a.get_key()] = (a, [])
-            logger.info(a.severity())
 
         # gather issues
         for i in self.jira.fetch_issues(repo.get_key()):
@@ -129,6 +128,7 @@ class Sync:
         # perform sync
         for akey, (alert, issues) in pairs.items():
             past_state = states.get(akey, None)
+            logger.info(alert.severity())
             if alert is None or alert.get_state() != past_state:
                 d = DIRECTION_G2J
             else:
