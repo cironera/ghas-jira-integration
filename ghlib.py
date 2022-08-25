@@ -153,13 +153,7 @@ class GHRepository:
             state = "&state=" + state
         else:
             state = ""
-        logger.info( "{api_url}/repos/{repo_id}/{api_segment}/alerts?per_page={results_per_page}{state}".format(
-                    api_url=self.gh.url,
-                    repo_id=self.repo_id,
-                    api_segment=api_segment,
-                    state=state,
-                    results_per_page=RESULTS_PER_PAGE,
-                ))
+
         try:
             resp = requests.get(
                 "{api_url}/repos/{repo_id}/{api_segment}/alerts?per_page={results_per_page}{state}".format(
@@ -274,10 +268,6 @@ class AlertBase:
 
     def get_key(self):
         raise NotImplementedError
-    
-    def severity(self):
-        logger.info(self.json)
-        return self.json["rule"]["severity"]
 
     def adjust_state(self, target_state):
         if self.get_state() == target_state:
@@ -306,6 +296,9 @@ class Alert(AlertBase):
 
     def short_desc(self):
         return self.json["rule"]["id"]
+
+    def severity(self):
+        return self.json["rule"]["severity"]
 
     def get_key(self):
         return util.make_key(self.github_repo.repo_id + "/" + str(self.number()))
