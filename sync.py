@@ -63,6 +63,7 @@ class Sync:
                 alert.number(),
                 alert.github_repo.get_key(),
                 alert.get_key(),
+                alert.severity(),
             )
             newissue.adjust_state(alert.get_state())
             return alert.get_state()
@@ -128,7 +129,6 @@ class Sync:
         # perform sync
         for akey, (alert, issues) in pairs.items():
             past_state = states.get(akey, None)
-            logger.info(alert.severity())
             if alert is None or alert.get_state() != past_state:
                 d = DIRECTION_G2J
             else:

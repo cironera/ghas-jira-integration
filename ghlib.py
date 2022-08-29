@@ -298,7 +298,13 @@ class Alert(AlertBase):
         return self.json["rule"]["id"]
 
     def severity(self):
-        return self.json["rule"]["severity"]
+        sevin = self.json["rule"]["severity"]
+        if sevin == "critical":
+            return "CRITICAL"
+        elif sevin == "error":
+            return "HIGH"
+        else:
+            return "MEDIUM"
 
     def get_key(self):
         return util.make_key(self.github_repo.repo_id + "/" + str(self.number()))

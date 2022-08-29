@@ -21,13 +21,10 @@ DESC_TEMPLATE = """
 
 {alert_url}
 
-----
+Repository: {repo_id}
+Alert #: {alert_num}
+
 This issue was automatically generated from a GitHub alert, and will be automatically resolved once the underlying problem is fixed.
-REPOSITORY_NAME={repo_id}
-ALERT_TYPE={alert_type}
-ALERT_NUMBER={alert_num}
-REPOSITORY_KEY={repo_key}
-ALERT_KEY={alert_key}
 """
 
 
@@ -174,6 +171,7 @@ class JiraProject:
         alert_num,
         repo_key,
         alert_key,
+        severity,
     ):
         raw = self.j.create_issue(
             project=self.projectkey,
@@ -197,6 +195,7 @@ class JiraProject:
             customfield_10909=repo_key,                     #Alert Reference Key
             customfield_10910=alert_key,                    #Alert Key
             customfield_10284=alert_url,                    #External Related Link
+            customfield_10908=severity,                     #Severity
         )
         logger.info(
             "Created issue {issue_key} for alert {alert_num} in {repo_id}.".format(
