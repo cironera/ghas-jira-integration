@@ -297,14 +297,14 @@ class Alert(AlertBase):
     def short_desc(self):
         return self.json["rule"]["id"]
 
-    def severity(self):
+    def severity(self):  #this returns the severity custom field ID's
         sevin = self.json["rule"]["severity"]
         if sevin == "critical":
-            return "CRITICAL"
+            return "20313"
         elif sevin == "error":
-            return "HIGH"
+            return "20314"
         else:
-            return "MEDIUM"
+            return "20315"
 
     def get_key(self):
         return util.make_key(self.github_repo.repo_id + "/" + str(self.number()))
@@ -348,7 +348,7 @@ class Secret(AlertBase):
         )
 
     def severity(self):
-        return "CRITICAL"
+        return "20313"
 
     def do_adjust_state(self, target_state):
         state = "open"

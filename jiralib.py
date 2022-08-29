@@ -195,7 +195,7 @@ class JiraProject:
             customfield_10909=repo_key,                     #Alert Reference Key
             customfield_10910=alert_key,                    #Alert Key
             customfield_10284=alert_url,                    #External Related Link
-            customfield_10908={"id": 1},           #Severity
+            customfield_10908={"id": severity},             #Severity
         )
         logger.info(
             "Created issue {issue_key} for alert {alert_num} in {repo_id}.".format(
